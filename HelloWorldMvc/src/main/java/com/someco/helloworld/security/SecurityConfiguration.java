@@ -20,9 +20,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/login").permitAll()
+				.antMatchers("/js/**").permitAll()
+				.antMatchers("/css/**").permitAll()
+				.antMatchers("/img/**").permitAll()
 				.antMatchers("/**")
 				.access("hasRole('USER') or hasRole('ADMIN') or hasRole('DBA')")
-				.and().formLogin().loginPage("/login").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/hello")
+				.and().formLogin().loginPage("/login").loginProcessingUrl("/j_spring_security_check") //.defaultSuccessUrl("/home")
 				.usernameParameter("username").passwordParameter("password").failureHandler(new SampleAuthenticationFailureHandle()).successHandler(new SampleAuthenticationSuccessHandler())
 				.and().logout().addLogoutHandler(new SampleLogoutHandler()).clearAuthentication(true).logoutSuccessUrl("/login?logout").logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.and().csrf().disable().exceptionHandling().accessDeniedPage("/Access_Denied");

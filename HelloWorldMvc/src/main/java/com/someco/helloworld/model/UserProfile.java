@@ -3,6 +3,7 @@ package com.someco.helloworld.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,11 +14,15 @@ import javax.persistence.Table;
 @Table(name="USER_PROFILE")
 public class UserProfile implements Serializable {
 
+	private static final long serialVersionUID = -8617511461348660961L;
+
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
+	//@Enumerated(EnumType.STRING)
 	@Column(name="TYPE", unique=true,nullable=false)
-	private String type = UserProfileType.USER.getUserProfileType();
+	@Convert(converter = EnumConvertor.class)
+	private Enum type = UserProfileType.USER;
 	
 	public Integer getId() {
 		return id;
@@ -27,11 +32,11 @@ public class UserProfile implements Serializable {
 		this.id = id;
 	}
 
-	public String getType() {
+	public Enum getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Enum type) {
 		this.type = type;
 	}
 	

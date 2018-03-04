@@ -35,7 +35,7 @@ public class SampleAuthenticationSuccessHandler implements AuthenticationSuccess
         /**
          * Check for user role and redirect the user to home page. We can set dashboard etc here
          */
-        redirectStrategy.sendRedirect(request, response, "/hello");
+        redirectStrategy.sendRedirect(request, response, "/home");
 	}
 
 }

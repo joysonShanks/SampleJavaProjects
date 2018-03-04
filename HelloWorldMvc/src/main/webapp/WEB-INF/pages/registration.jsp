@@ -8,7 +8,12 @@
 <body>
  
    <form action="/newUser" method="post">
-   	<input type="submit">submit</input>
+   	<input type="text" name="userName" />
+   	<input type="text" name="password" />
+   	<input type="text" name="firstName" />
+   	<input type="text" name="lastName" />
+   	<input type="text" name="email" />
+   	<button type="submit">submit</button>
    </form>
 </body>
 </html>

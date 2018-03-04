@@ -45,7 +45,6 @@ public class UserAuthenticator implements AuthenticationProvider {
 				throw new BadCredentialsException("Not a valid userName");
 			}
 			
-			@SuppressWarnings("unchecked")
 			Set<UserProfile> userProfiles = user.getUserProfiles();
 			for(UserProfile userProfile : userProfiles) {
 				auth.add(new SimpleGrantedAuthority("ROLE_" + userProfile.getType().toString()));

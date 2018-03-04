@@ -5,46 +5,53 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Login page</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  rel="stylesheet"></link>
-        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
+        
+        <link rel="shortcut icon" href="img/favicon.ico" />
+       	<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"></link>
+       	<link href="css/font-awesome/webfonts/fontawesome-all.min.css" rel="stylesheet"></link>
+       	
+       	<link href="css/helloworld-common.css" rel="stylesheet"></link>
+       	<link href="css/login.css" rel="stylesheet"></link>
+        
+        <script src="js/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+ 		<script src="js/popper/popper.min.js" type="text/javascript"></script>
+ 		<script src="js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
     </head>
  
-    <body>
-        <div id="mainWrapper">
-            <div class="login-container">
-                <div class="login-card">
-                    <div class="login-form">
-                        <c:url var="loginUrl" value="/j_spring_security_check" />
-                        <form action="<%=request.getContextPath()%>/j_spring_security_check" method="post" class="form-horizontal">
-                            <c:if test="${param.error != null}">
-                                <div class="alert alert-danger">
-                                    <p>Invalid username or password.</p>
-                                </div>
-                            </c:if>
-                            <c:if test="${param.logout != null}">
-                                <div class="alert alert-success">
-                                    <p>You have been logged out successfully.</p>
-                                </div>
-                            </c:if>
-                            <div class="input-group input-sm">
-                                <label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
-                            </div>
-                            <div class="input-group input-sm">
-                                <label class="input-group-addon" for="password"><i class="fa fa-lock"></i></label> 
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                            </div>
-                            <div class="form-actions">
-                                <input type="submit"
-                                    class="btn btn-block btn-primary btn-default" value="Log in">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
- 
+    <body> 
+	    <div class="container">
+	    	<div class="login-section login-center">
+			     <form action="<%=request.getContextPath()%>/j_spring_security_check" method="post" class="form-horizontal" accept-charset="UTF-8">
+			         <c:if test="${param.error != null}">
+			             <div class="alert alert-danger inputdiv-placing">
+			                 <p class="login-alert-message">Invalid username or password.</p>
+			             </div>
+			         </c:if>
+			         <c:if test="${param.logout != null}">
+			             <div class="alert alert-success inputdiv-placing">
+			                 <p class="login-alert-message">You have been logged out successfully.</p>
+			             </div>
+			         </c:if>
+			         <div class="form-group">
+				         <div class="input-group inputdiv-placing">
+				             <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+				             <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+				         </div>
+			         </div>
+			         <div class="form-group">
+				         <div class="input-group inputdiv-placing">
+				             <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span> 
+				             <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+				             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				         </div>
+			         </div>
+			         <div class="form-group">
+			         	<button type="submit" class="btn btn-block btn-primary btn-default login-button">Log in</button>
+			         </div>
+			     </form>
+	     </div>
+	    </div>
     </body>
 </html>

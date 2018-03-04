@@ -1,6 +1,7 @@
 package com.someco.helloworld.config;
 
 import javax.servlet.FilterRegistration;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -13,6 +14,9 @@ import org.springframework.web.servlet.DispatcherServlet;
  
 public class SpringWebAppInitializer implements WebApplicationInitializer {
  
+	//private String TMP_FOLDER = "/tmp"; 
+    private int MAX_UPLOAD_SIZE = 5 * 1024 * 1024; 
+    
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
         appContext.register(ApplicationContextConfig.class);
@@ -24,7 +28,12 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
         dispatcher.addMapping("/");
          
         dispatcher.setInitParameter("contextClass", appContext.getClass().getName());
- 
+        
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(System.getProperty("java.io.tmpdir"), 
+                MAX_UPLOAD_SIZE, MAX_UPLOAD_SIZE * 2, MAX_UPLOAD_SIZE / 2);
+        
+        dispatcher.setMultipartConfig(multipartConfigElement);
+        
         servletContext.addListener(new ContextLoaderListener(appContext));
          
         // UTF8 Charactor Filter.

@@ -1,6 +1,8 @@
 package com.someco.helloworld.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
@@ -15,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.someco.helloworld.exception.HelloWorldException;
+import com.someco.helloworld.model.User;
 import com.someco.helloworld.model.UserProfile;
+import com.someco.helloworld.model.UserProfileType;
 import com.someco.helloworld.service.UserProfileService;
 import com.someco.helloworld.service.UserService;
 
@@ -37,6 +42,10 @@ public class UserController {
 	public String register(Model model) throws Exception{
 		return "registration";
 	}
+	
+	/*public void setUserService(UserService userService) {
+		this.userService = userService;
+	}*/
 	
 	/**
      * This method will provide UserProfile list to views
@@ -64,7 +73,7 @@ public class UserController {
         if (isCurrentAuthenticationAnonymous()) {
             return "login";
         } else {
-        	return "redirect:/hello";
+        	return "home";
         }
     }
     
@@ -94,6 +103,38 @@ public class UserController {
     private boolean isCurrentAuthenticationAnonymous() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authenticationTrustResolver.isAnonymous(authentication);
+    }
+    
+    @RequestMapping(value = "/newUser", method = RequestMethod.POST)
+    public String newUser(User user)  throws HelloWorldException {
+    	if(user.getUserName().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
+    		throw new HelloWorldException("Please provide required user details");
+    	}
+    	try {
+    		UserProfile userProfile = userProfileService.findById(1);
+    		Set<UserProfile> userProfiles = new HashSet<>();
+    		userProfiles.add(userProfile);
+    		user.setUserProfiles(userProfiles);
+    		userService.saveUser(user);
+    	} catch(Exception ex) {
+    		throw new HelloWorldException(ex.getMessage());
+    	}
+        return "registration";
+    }
+    
+    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
+    public String userInfo() {
+        return "userInfo";
+    }
+    
+    @RequestMapping(value = "/getAllUsersByRole", method = RequestMethod.GET)
+    public void getAllUsersByRole() throws HelloWorldException {
+    	try {
+    		UserProfile userProfile = userProfileService.findByType(UserProfileType.ADMIN);
+        	userProfile.toString();
+    	} catch(Exception ex) {
+    		ex.printStackTrace();
+    	}
     }
 
 }

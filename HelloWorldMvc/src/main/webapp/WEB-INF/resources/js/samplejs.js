@@ -1,5 +1,5 @@
 function helloJs() {
-	alert("hello");
+	console.info("Page loaded successfully");
 }
 
 helloJs();

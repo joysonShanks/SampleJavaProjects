@@ -8,9 +8,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.someco.helloworld.model.UserProfile;
+import com.someco.helloworld.model.UserProfileType;
 
 @Repository("userProfileDao")
-public class UserProfileDaoImpl extends AbstractDao<Integer, UserProfile>implements UserProfileDao {
+public class UserProfileDaoImpl extends AbstractDao<Integer, UserProfile> implements UserProfileDao {
 
 	@SuppressWarnings("unchecked")
 	public List<UserProfile> findAll() {
@@ -19,9 +20,9 @@ public class UserProfileDaoImpl extends AbstractDao<Integer, UserProfile>impleme
 		return (List<UserProfile>) crit.list();
 	}
 
-	public UserProfile findByType(String type) {
+	public UserProfile findByType(UserProfileType type) {
 		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eqProperty("type", type));
+		crit.add(Restrictions.eq("type", type));
 		return (UserProfile) crit.uniqueResult();
 	}
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.someco.helloworld.dao.UserProfileDao;
 import com.someco.helloworld.model.UserProfile;
+import com.someco.helloworld.model.UserProfileType;
 
 @Service("userProfileService")
 @Transactional
@@ -21,7 +22,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 		return userProfileDao.findById(id);
 	}
 
-	public UserProfile findByType(String type) {
+	public UserProfile findByType(UserProfileType type) {
 		return userProfileDao.findByType(type);
 	}
 

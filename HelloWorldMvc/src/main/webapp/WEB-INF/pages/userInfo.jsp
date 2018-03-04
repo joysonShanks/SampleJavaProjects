@@ -5,11 +5,16 @@
 </head>
 <body>
 
-	<h2>${name}</h2>
-
-	Email: ${email}
-	<br>
-
-
+	<form method="POST" action="/uploadFile" enctype="multipart/form-data">
+	    <table>
+	        <tr>
+	            <td>Select a file to upload</td>
+	            <td><input type="file" name="file" /></td>
+	        </tr>
+	        <tr>
+	            <td><input type="submit" value="Submit" /></td>
+	        </tr>
+	    </table>
+	</form>
 </body>
 </html>
