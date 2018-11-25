@@ -1,0 +1,209 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx = "http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context-3.0.xsd
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+   http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!-- Inorder to use @Autowired instead of getters and setter we require 
+		below lines and above xmlns:context, schema/context lines -->
+	<context:annotation-config />
+	<!-- below line is required for class based aop -->
+	<aop:aspectj-autoproxy/>
+	<tx:annotation-driven/>
+
+	<bean id="helloWorld" class="com.learner.spring.HelloWorld">
+		<property name="message" value="Hello World!" />
+		<!-- <property name="message"> <null/> </property> -->
+	</bean>
+
+	<bean id="springJavaCollection" class="com.learner.spring.SpringJavaCollection">
+		<!-- results in a setAddressList(java.util.List) call -->
+		<property name="addressList">
+			<list>
+				<value>Value1</value>
+				<value>Value1</value>
+				<value>Value2</value>
+				<value>Value3</value>
+				<value>Value4</value>
+			</list>
+		</property>
+
+		<!-- results in a setAddressSet(java.util.Set) call -->
+		<property name="addressSet">
+			<set>
+				<value>Value1</value>
+				<value>Value1</value>
+				<value>Value2</value>
+				<value>Value3</value>
+				<value>Value4</value>
+			</set>
+		</property>
+
+		<!-- results in a setAddressMap(java.util.Map) call -->
+		<property name="addressMap">
+			<map>
+				<entry key="1" value="Value1" />
+				<entry key="2" value="Value1" />
+				<entry key="3" value="Value2" />
+				<entry key="4" value="Value3" />
+				<entry key="5" value="Value4" />
+			</map>
+		</property>
+
+		<!-- results in a setAddressProp(java.util.Properties) call -->
+		<property name="addressProp">
+			<props>
+				<prop key="one">Value1</prop>
+				<prop key="one">Value1</prop>
+				<prop key="two">Value2</prop>
+				<prop key="three">Value3</prop>
+				<prop key="four">Value4</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- This is auto wiring byName the id has to match with the constructor 
+		in TextEditor class -->
+	<bean id="textEditor" class="com.learner.spring.TextEditor"
+		autowire="byName">
+		<property name="name" value="Message !!"></property>
+	</bean>
+
+	<bean id="spellChecker" class="com.learner.spring.SpellChecker"></bean>
+
+	<!-- This is auto wiring byName the id has to match with the constructor 
+		in GrammerEditor class -->
+	<bean id="grammerEditor" class="com.learner.spring.GrammerEditor"
+		autowire="byType">
+		<property name="name" value="Message !!"></property>
+	</bean>
+
+	<bean id="grammerChecker" class="com.learner.spring.GrammerChecker"></bean>
+
+	<!-- If the below bean is enabled then container throws org.springframework.beans.factory.NoUniqueBeanDefinitionException: 
+		No qualifying bean of type 'com.learner.spring.GrammerChecker' available: 
+		expected single matching bean but found 2: grammerChecker,grammerChecker1 
+		This is because byName autowire can have only one bean type -->
+	<!-- <bean id="grammerChecker1" class="com.learner.spring.GrammerChecker"></bean> -->
+
+	<!-- This is auto wiring byContructor. ParagraphEditor class should contain 
+		ParagraphChecker type argument with name paragraphChecker and String type 
+		with name "name" -->
+	<bean id="paragraphEditor" class="com.learner.spring.ParagraphEditor"
+		autowire="constructor">
+		<constructor-arg name="name" value="Message !!" />
+	</bean>
+
+	<bean id="paragraphChecker" class="com.learner.spring.ParagraphChecker" />
+
+	<!-- autowire="autodetect" Spring first tries to wire using autowire by 
+		constructor, if it does not work, Spring tries to autowire by byType. -->
+
+	<bean id="student" class="com.learner.spring.annotationbased.Student">
+		<property name="name" value="Joyson" />
+		<!-- org.springframework.beans.factory.BeanInitializationException: Property 
+			'age' is required for bean 'student' is thrown if you comment below property -->
+		<property name="age" value="23" />
+	</bean>
+
+	<bean id="wysiwygEditor" class="com.learner.spring.annotationbased.WysiwygEditor" />
+
+	<bean id="profile" class="com.learner.spring.annotationbased.Profile" />
+
+	<bean id="student1" class="com.learner.spring.annotationbased.Student">
+		<property name="name" value="Jaison" />
+		<property name="age" value="25" />
+	</bean>
+
+	<!-- AOP configuration !! -->
+	<aop:config>
+		<aop:aspect id="aopSpring" ref="aopSpringLogging">
+			<aop:pointcut expression="execution(* com.learner.spring.aop.*.*(..))"
+				id="selectAll" />
+			<aop:before method="beforeAdvice" pointcut-ref="selectAll" />
+			<aop:after method="afterAdvice" pointcut-ref="selectAll" />
+			<!--<aop:after-returning method="afterReturningAdvice"
+				pointcut-ref="selectAll" arg-names=""/>-->
+			<aop:after-throwing method="AfterThrowingAdvice"
+				throwing="ex" pointcut-ref="selectAll" />
+		</aop:aspect>
+		
+	</aop:config>
+	<bean id="aopSpringLogging" class="com.learner.spring.aop.SpringAOPLogging" />
+	<bean id="aopStudent" class="com.learner.spring.aop.AOPStudent">
+		<property name="age" value="25" />
+		<property name="name" value="Joyson" />
+	</bean>
+	
+	<!-- Both studentAspect and aopLogging beans are required to perform aspect based programming -->
+	<bean id="studentAspect" class="com.learner.spring.aop.aspectj.Student">
+		<property name="age" value="25"/>
+		<property name="name" value="Joyson Dsouza"/>
+	</bean>
+	
+	<bean id="aopLogging" class="com.learner.spring.aop.aspectj.Logging"/>
+	
+	<!-- Spring jdbc examples -->
+	<bean id = "dataSource" 
+	   class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+	   <property name = "driverClassName" value = "org.postgresql.Driver"/>
+	   <property name = "url" value = "jdbc:postgresql://localhost:5432/test"/>
+	   <property name = "username" value = "postgres"/>
+	   <property name = "password" value = "admin"/>
+	</bean>
+	
+	<!-- Definition for studentJDBCTemplate bean -->
+	<bean id="studentJDBCTemplate" class="com.learner.spring.jdbc.StudentJDBCTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- programmatic transaction settings -->
+	<!-- Initialization for TransactionManager -->
+   <bean id = "transactionManager" 
+      class = "org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      <property name = "dataSource"  ref = "dataSource" />    
+   </bean>
+   
+   <!-- Definition for studentJDBCTemplate bean -->
+   <bean id = "studentJDBCTemplateTransaction"
+      class = "com.learner.spring.transaction.StudentJDBCTemplate">
+      <property name = "dataSource" ref = "dataSource" />
+      <property name = "transactionManager" ref = "transactionManager" />    
+   </bean>
+   
+   <!-- declarative transaction settings -->
+   <tx:advice id = "txAdvice" transaction-manager = "transactionManager">
+      <tx:attributes>
+      <tx:method name = "create"/>
+      </tx:attributes>
+   </tx:advice>
+   
+   <aop:config>
+      <aop:pointcut id = "createOperation" 
+         expression = "execution(* com.learner.spring.transaction.declarative.StudentJDBCTemplate.create(..))"/>
+      
+      <aop:advisor advice-ref = "txAdvice" pointcut-ref = "createOperation"/>
+   </aop:config>
+   
+   <!-- Definition for studentJDBCTemplate bean -->
+   <bean id = "studentJDBCTemplateTransactionDec"
+      class = "com.learner.spring.transaction.declarative.StudentJDBCTemplate">
+      <property name = "dataSource" ref = "dataSource"/>  
+   </bean>
+   
+   <!-- Definition for studentJDBCTemplate bean -->
+   <bean id = "studentTransAnnotationDriven"
+      class = "com.learner.spring.transaction.declarative.StudentTransAnnotationDriven">
+      <property name = "dataSource" ref = "dataSource"/>  
+   </bean>
+   
+</beans>
